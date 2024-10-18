@@ -1,32 +1,26 @@
 from typing import List
-from itertools import combinations
 
 
 class Solution:
     def countMaxOrSubsets(self, nums: List[int]) -> int:
-        answer = Answer()
-        max_or = self.max_or_from_array(nums)
-
-        for i in range(1, len(nums) + 1):
-            for combination in combinations(nums, i):
-                if self.max_or_from_array(combination) == max_or:
-                    answer.count += 1
-
-        return answer.count
-
-    @staticmethod
-    def max_or_from_array(nums):
         max_or = 0
+        n = len(nums)
 
+        # Find the maximum OR value from the array
         for num in nums:
             max_or |= num
 
-        return max_or
+        count = 0
+        # Iterate through all possible subsets using bit manipulation
+        for mask in range(1 << n):
+            current_or = 0
+            for i in range(n):
+                if mask & (1 << i):
+                    current_or |= nums[i]
+            if current_or == max_or:
+                count += 1
 
-
-class Answer:
-    def __init__(self):
-        self.count = 0
+        return count
 
 
 if __name__ == "__main__":
